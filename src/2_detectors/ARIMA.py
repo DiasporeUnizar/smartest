@@ -2,7 +2,7 @@
 @Author: Simona Bernardi, Raúl Javierre
 @Date: updated 13/11/2020
 
-@Review: Simona Bernardi - 19/03/2021
+@Review: Simona Bernardi - 6/04/2021
 
 This module provides the functionality of an ARIMA detector
 """
@@ -11,14 +11,8 @@ This module provides the functionality of an ARIMA detector
 import numpy as np
 import pmdarima as pm
 from pmdarima.arima.utils import ndiffs
-#from pmdarima.preprocessing import FourierFeaturizer
 from src.detectors.Detector import Detector
 from time import time
-
-#SB: The following constants are not used in this code (to be removed?)
-
-#nObs = 336  # number of readings in a week
-#freq = 48  # number of readings in a seasonal cycle: every half-an-hour in a day
 
 
 class ARIMA(Detector):
@@ -40,9 +34,6 @@ def buildARIMAModel(train):
     # Other possibilities: kpss, pp
     n_adf = ndiffs(train, test='adf')
 
-    #SB: These two lines should be removed since for this detector we do not use exogenous variables
-    #trans = FourierFeaturizer(freq)
-    #train, exog = trans.fit_transform(train)
 
     # Looking for the best params with auto_arima -- time expensive!!
     # model(p,d,q)

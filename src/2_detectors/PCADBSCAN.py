@@ -2,7 +2,7 @@
 @Author: Simona Bernardi, Raúl Javierre
 @Date: updated 05/04/2021
 
-@Review: Simona Bernardi - 19/03/2021
+@Review: Simona Bernardi - 06/04/2021
 
 ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡This detector is designed ONLY for Energy dataset (ISSDA-CER)!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -224,47 +224,6 @@ class dataAnalyzerDBSCAN:
         meterID = self.TS['ID'].values[0]
         self.Y_BmeterID = self.Y_B[self.Y_B.meterID == meterID]
 
-    '''
-    SB: The following method is not used in the experiments.
-    def plotPoints(self, db, radiusSn):
-        # Pre: there is only one cluster (0)
-        # Core point mask
-        core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
-        core_samples_mask[db.core_sample_indices_] = True
-
-        # Number of clusters in labels, ignoring noise if present.
-        n_noise_ = list(db.labels_).count(-1)
-
-        # Points belonging to the cluster 0
-        class_member_mask = (db.labels_ == 0)
-
-        # Core points of the cluster 0
-        coreP = self.Y_BmeterID[core_samples_mask]
-
-        # Plot eps neighborhoods of core points
-        npoints = 2  # dimension of a point in the plot
-        plt.plot(coreP[:, 0], coreP[:, 1], 'o', color='yellow', alpha=0.4,
-                 markersize=5.0 * npoints * radiusSn)
-
-        # Plot core points of the cluster 0
-        plt.plot(coreP[:, 0], coreP[:, 1], 'o', color='green', markersize=npoints)
-
-        # Fringe points of the cluster 0
-        fringeP = self.Y_BmeterID[class_member_mask & ~core_samples_mask]
-        # Plot fringe points of the cluster 0
-        plt.plot(fringeP[:, 0], fringeP[:, 1], 'v', color='blue', markersize=npoints)
-
-        # Noise points (outside the cluster 0)
-        noise_member_mask = (db.labels_ == -1)
-        noiseP = self.Y_BmeterID[noise_member_mask]
-        # Plot noise points = anomalous weeks
-        plt.plot(noiseP[:, 0], noiseP[:, 1], 'x', color='red', markersize=npoints)
-
-        plt.title("Core, fringe and noise points of tested meterID")
-        plt.xlabel("Principal component 1")
-        plt.ylabel("Principal component 2")
-        plt.show()
-    '''
 
     def computeOutliers(self, db, radius):
 

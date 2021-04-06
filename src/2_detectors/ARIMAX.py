@@ -2,7 +2,7 @@
 @Author: Simona Bernardi, Raúl Javierre
 @Date: updated 13/11/2020
 
-@Review: Simona Bernardi - 19/03/2021
+@Review: Simona Bernardi - 06/04/2021
 
 This module provides the functionality of an ARIMAX detector with exogenous variables (Fourier)
 """
@@ -15,8 +15,6 @@ from pmdarima.preprocessing import FourierFeaturizer
 from src.detectors.Detector import Detector
 from time import time
 
-#SB: The following constant "nObs" is not used in this code (remove?)
-#nObs = 336  # number of readings in a week
 freq = 48  # number of readings in a seasonal cycle: every half-an-hour in a day
 
 

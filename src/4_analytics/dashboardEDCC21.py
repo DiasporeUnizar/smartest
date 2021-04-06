@@ -238,8 +238,8 @@ def generate_scenario_metric_for_each_detector(df,behaviours,detectors,type):
 
     scenario_acc = pd.DataFrame(np.array(acc_m), columns=detectors, index=behaviours)
     outputFile= './script_results/' + type + 'scenariosAccuracy'
-    scenario_acc.to_csv(outputFile, index=True, float_format="{:.3f}".format)
-    scenario_acc.to_latex(outputFile +'.tex', index=True, float_format="{:.3f}".format)
+    #scenario_acc.to_csv(outputFile, index=True, float_format="{:.3f}".format)
+    #scenario_acc.to_latex(outputFile +'.tex', index=True, float_format="{:.3f}".format)
     scenario_acc.to_html(outputFile + '.html', index=True, float_format="{:.3f}".format)
 
 
@@ -251,8 +251,8 @@ def compute_MCC(mat):
 
 def save_global_metrics_for_each_detector(df,type): 
 	outputFile= './script_results/' + type + 'globalMetrics'
-	df.to_csv(outputFile, index=False, float_format="{:.3f}".format)
-	df.to_latex(outputFile +'.tex', index=False, float_format="{:.3f}".format)
+	#df.to_csv(outputFile, index=False, float_format="{:.3f}".format)
+	#df.to_latex(outputFile +'.tex', index=False, float_format="{:.3f}".format)
 	df.to_html(outputFile + '.html', index=False, float_format="{:.3f}".format)
 
 def get_performance_metrics(df): 

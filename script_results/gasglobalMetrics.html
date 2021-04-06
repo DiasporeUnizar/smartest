@@ -1,0 +1,142 @@
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>detector</th>
+      <th>accuracy</th>
+      <th>misclass</th>
+      <th>recall</th>
+      <th>FNR</th>
+      <th>TNR</th>
+      <th>FPN</th>
+      <th>precision</th>
+      <th>NPV</th>
+      <th>balancedAccuracy</th>
+      <th>f1-score</th>
+      <th>mcc</th>
+      <th>prevalence</th>
+      <th>tb</th>
+      <th>tp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Min-Avg</td>
+      <td>0.214</td>
+      <td>0.786</td>
+      <td>0.144</td>
+      <td>0.856</td>
+      <td>0.991</td>
+      <td>0.009</td>
+      <td>0.995</td>
+      <td>0.095</td>
+      <td>0.568</td>
+      <td>0.251</td>
+      <td>0.110</td>
+      <td>0.917</td>
+      <td>{'min': '0.083', 'mean': '0.086', 'std': '0.001', 'Q1': '0.085', 'Q2': '0.086', 'Q3': '0.087', 'max': '0.091', 'lower-95%': '0.086', 'upper-95%': '0.086', 'CI-half-length': '0.000'}</td>
+      <td>{'min': '0.022', 'mean': '0.023', 'std': '0.000', 'Q1': '0.023', 'Q2': '0.023', 'Q3': '0.023', 'max': '0.028', 'lower-95%': '0.023', 'upper-95%': '0.023', 'CI-half-length': '0.000'}</td>
+    </tr>
+    <tr>
+      <td>ARIMA</td>
+      <td>0.102</td>
+      <td>0.898</td>
+      <td>0.026</td>
+      <td>0.974</td>
+      <td>0.934</td>
+      <td>0.066</td>
+      <td>0.812</td>
+      <td>0.080</td>
+      <td>0.480</td>
+      <td>0.050</td>
+      <td>-0.066</td>
+      <td>0.917</td>
+      <td>{'min': '12.846', 'mean': '50.562', 'std': '32.692', 'Q1': '27.941', 'Q2': '40.315', 'Q3': '62.234', 'max': '188.032', 'lower-95%': '49.735', 'upper-95%': '51.389', 'CI-half-length': '0.827'}</td>
+      <td>{'min': '0.071', 'mean': '0.078', 'std': '0.006', 'Q1': '0.075', 'Q2': '0.076', 'Q3': '0.077', 'max': '0.100', 'lower-95%': '0.078', 'upper-95%': '0.078', 'CI-half-length': '0.000'}</td>
+    </tr>
+    <tr>
+      <td>ARIMAX</td>
+      <td>0.110</td>
+      <td>0.890</td>
+      <td>0.035</td>
+      <td>0.965</td>
+      <td>0.936</td>
+      <td>0.064</td>
+      <td>0.857</td>
+      <td>0.081</td>
+      <td>0.485</td>
+      <td>0.067</td>
+      <td>-0.043</td>
+      <td>0.917</td>
+      <td>{'min': '224.904', 'mean': '630.984', 'std': '247.609', 'Q1': '438.098', 'Q2': '558.928', 'Q3': '778.102', 'max': '1604.693', 'lower-95%': '624.718', 'upper-95%': '637.249', 'CI-half-length': '6.265'}</td>
+      <td>{'min': '0.143', 'mean': '0.155', 'std': '0.013', 'Q1': '0.151', 'Q2': '0.154', 'Q3': '0.156', 'max': '0.485', 'lower-95%': '0.155', 'upper-95%': '0.156', 'CI-half-length': '0.000'}</td>
+    </tr>
+    <tr>
+      <td>PCA-DBSCAN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>{'min': 'nan', 'mean': 'nan', 'std': 'nan', 'Q1': 'nan', 'Q2': 'nan', 'Q3': 'nan', 'max': 'nan', 'lower-95%': 'nan', 'upper-95%': 'nan', 'CI-half-length': 'nan'}</td>
+      <td>{'min': 'nan', 'mean': 'nan', 'std': 'nan', 'Q1': 'nan', 'Q2': 'nan', 'Q3': 'nan', 'max': 'nan', 'lower-95%': 'nan', 'upper-95%': 'nan', 'CI-half-length': 'nan'}</td>
+    </tr>
+    <tr>
+      <td>KLD</td>
+      <td>0.518</td>
+      <td>0.482</td>
+      <td>0.477</td>
+      <td>0.523</td>
+      <td>0.965</td>
+      <td>0.035</td>
+      <td>0.993</td>
+      <td>0.144</td>
+      <td>0.721</td>
+      <td>0.645</td>
+      <td>0.246</td>
+      <td>0.917</td>
+      <td>{'min': '0.008', 'mean': '0.008', 'std': '0.000', 'Q1': '0.008', 'Q2': '0.008', 'Q3': '0.008', 'max': '0.009', 'lower-95%': '0.008', 'upper-95%': '0.008', 'CI-half-length': '0.000'}</td>
+      <td>{'min': '0.002', 'mean': '0.002', 'std': '0.000', 'Q1': '0.002', 'Q2': '0.002', 'Q3': '0.002', 'max': '0.003', 'lower-95%': '0.002', 'upper-95%': '0.002', 'CI-half-length': '0.000'}</td>
+    </tr>
+    <tr>
+      <td>JSD</td>
+      <td>0.551</td>
+      <td>0.449</td>
+      <td>0.512</td>
+      <td>0.488</td>
+      <td>0.971</td>
+      <td>0.029</td>
+      <td>0.995</td>
+      <td>0.153</td>
+      <td>0.742</td>
+      <td>0.676</td>
+      <td>0.268</td>
+      <td>0.917</td>
+      <td>{'min': '0.008', 'mean': '0.009', 'std': '0.000', 'Q1': '0.008', 'Q2': '0.008', 'Q3': '0.009', 'max': '0.010', 'lower-95%': '0.009', 'upper-95%': '0.009', 'CI-half-length': '0.000'}</td>
+      <td>{'min': '0.002', 'mean': '0.002', 'std': '0.000', 'Q1': '0.002', 'Q2': '0.002', 'Q3': '0.002', 'max': '0.007', 'lower-95%': '0.002', 'upper-95%': '0.002', 'CI-half-length': '0.000'}</td>
+    </tr>
+    <tr>
+      <td>NN</td>
+      <td>0.870</td>
+      <td>0.130</td>
+      <td>0.939</td>
+      <td>0.061</td>
+      <td>0.113</td>
+      <td>0.887</td>
+      <td>0.921</td>
+      <td>0.143</td>
+      <td>0.526</td>
+      <td>0.930</td>
+      <td>0.057</td>
+      <td>0.917</td>
+      <td>{'min': '8.685', 'mean': '9.021', 'std': '0.182', 'Q1': '8.876', 'Q2': '9.011', 'Q3': '9.110', 'max': '9.669', 'lower-95%': '9.016', 'upper-95%': '9.026', 'CI-half-length': '0.005'}</td>
+      <td>{'min': '1.582', 'mean': '1.668', 'std': '0.082', 'Q1': '1.618', 'Q2': '1.631', 'Q3': '1.708', 'max': '2.074', 'lower-95%': '1.666', 'upper-95%': '1.670', 'CI-half-length': '0.002'}</td>
+    </tr>
+  </tbody>
+</table>

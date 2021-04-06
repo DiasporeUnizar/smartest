@@ -24,3 +24,9 @@ You can run the following command for installing them:
 
 $ pip install -r requirements.txt
 
+
+## Reference
+
+The original input datasets are the electricity and gas dataset from the Irish Social Science Data Archive - Commision for Energy Regulation (ISSDA-CER).
+Both are available, for research purposes, upon request, and the information provided is anonymous.
+External link: https://www.ucd.ie/issda/data/commissionforenergyregulationcer/

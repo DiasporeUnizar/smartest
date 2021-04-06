@@ -1,0 +1,14 @@
+matplotlib
+numpy>=1.18.1
+pandas
+pmdarima
+scipy
+scikit-learn
+statsmodels
+parameterized
+pytest
+robustbase
+jenkspy
+keras
+tensorflow
+pytest-cov

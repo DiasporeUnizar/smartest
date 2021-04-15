@@ -7,10 +7,10 @@ of detectors of integrity attacks to smart-meters.
 ## Structure of the repository
 
 - *src*: this folder includes the Python source code (organized in sub-folders):
-  - *1_preprocessing*: datasets pre-processing module and synthetic dataset generator
-  - *2_detectors*:  software detectors, detector infrastructure 
-  - *3_experiments*: the experiments launcher module
-  - *4_analytics*: the dashboard module
+  - *preprocessing*: datasets pre-processing module and synthetic dataset generator
+  - *detectors*:  software detectors, detector infrastructure 
+  - *experiments*: the experiments launcher module
+  - *analytics*: the dashboard module
 - *script_results*: outputs from the experiments. 
 - *requirements.txt*: the Python3 packages required to run the scripts
 - *README*: this file
@@ -22,7 +22,9 @@ of detectors of integrity attacks to smart-meters.
 The dependencies of the tool are listed in requirements.txt.
 You can run the following command for installing them:
 
-$ pip install -r requirements.txt
+```$ pip install -r requirements.txt```
+
+You must run all the ```python3``` commands from the root directory.
 
 
 ## Reference

@@ -10,7 +10,6 @@ The results with all the metrics are generated in /script_results/dataset_detect
 - Execution time of model creation
 - Execution time of model prediction
 - Accuracy = (TP + TN) /(TP + TN + FP + FN) 
-/// SB: the accuracy is actually a "derived metric" that can be posponed (computed with the dashboard)
 - Number of TP (True Positives)
 - Number of FP (False Positives)
 - Number of TN (True Negatives)
@@ -49,7 +48,7 @@ The results with all the metrics are generated in /script_results/dataset_detect
 
 import sys
 from src.detectors.DetectorFactory import DetectorFactory
-from src.experiments import meterIDsGas, meterIDsEnergy, test_tuple_of_attacks, test_list_of_detectors
+from src import meterIDsGas, meterIDsEnergy
 from time import time
 
 # The dataset is set in the first parameter
@@ -62,7 +61,6 @@ if __name__ == '__main__':
     """
     args:
     sys.argv[1]:dataset ("energy" or "gas")
-    sys.argv[2]:test ("on" or None, if it is set, it uses only 1 meterID, all the attacks and only the lightest detectors)
     """
     if sys.argv[1] != "energy" and sys.argv[1] != "gas":
         print("Usage: python3 training_and_testing_generator.py <energy/gas> <test>")
@@ -72,12 +70,6 @@ if __name__ == '__main__':
         list_of_meterIDs = meterIDsEnergy
     else:
         list_of_meterIDs = meterIDsGas
-
-    test_mode = len(sys.argv) == 3 and sys.argv[2] == "on"
-    if test_mode:
-        list_of_meterIDs = [list_of_meterIDs[0]]
-        tuple_of_attacks = test_tuple_of_attacks
-        list_of_detectors = test_list_of_detectors
 
     processed_meterIDs = 0
     t0 = time()
@@ -95,7 +87,7 @@ if __name__ == '__main__':
                 n_tp, n_tn, n_fp, n_fn = detector.compute_outliers(obs, predictions, attack)
 
                 detector.print_metrics(meterID, name_of_detector, attack, time_model_creation, time_model_prediction, n_tp, n_tn, n_fp, n_fn)
-                detector.metrics_to_csv(meterID, name_of_detector, attack, time_model_creation, time_model_prediction, n_tp, n_tn, n_fp, n_fn, sys.argv[1] if not test_mode else "test_" + sys.argv[1])
+                detector.metrics_to_csv(meterID, name_of_detector, attack, time_model_creation, time_model_prediction, n_tp, n_tn, n_fp, n_fn, sys.argv[1])
 
         processed_meterIDs += 1
 

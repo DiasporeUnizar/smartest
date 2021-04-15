@@ -57,6 +57,3 @@ meterIDsGas = \
             1705, 1396, 1709, 1987, 1889, 1260, 1478, 1806, 2224, 1234, 2397, 1610, 2487, 2134, 1366, 1744, 1867, 1711,
             1888, 1163, 2265, 1089, 2353, 1085, 1511, 1940, 1169, 2301, 1607, 2221, 1250, 1882, 1537, 1780, 1466, 1894,
             1498, 1461, 2386, 2411, 1857, 2476, 2110, 2071, 1350, 2020, 1196, 1297, 1616, 2016]
-
-test_tuple_of_attacks = (False, "RSA_0.5_1.5", "RSA_0.25_1.1", "Avg", "Min-Avg", "Swap", "FDI0", "FDI5", "FDI10", "FDI20", "FDI30")
-test_list_of_detectors = ["Min-Avg", "JSD", "FisherJenks", "KLD", "K-Means", "MiniBatchK-Means", "IsolationForest", "NN", "TEG_Cosine", "TEG_Hamming", "TEG_KLD", "PCA-DBSCAN"]

@@ -75,7 +75,7 @@ def get_min_avg_of_training_weeks(caseID):   # Heavy!!! and a little bit legacy.
     min_avg = MAX_MIN_AVG
 
     for i in range(0, LAST_WEEK_TRAINING + 1):  # training weeks [week0, week60]
-        filename = "./ISSDA-CER/" + dataset + "/data/data_all_filtered/" + dataset + "DataWeek " + str(i)
+        filename = "./ISSDA-CER/" + dataset.lower() + "/data/data_all_filtered/" + dataset + "DataWeek " + str(i)
         try:
             dset = pd.read_csv(filename)
         except FileNotFoundError:  # Range is not complete or is out of range

@@ -1,12 +1,37 @@
 """
-Created on Jul 31, 2019
-Updated on Aug 14, 2020
+Updated on April 21, 2021
 
 @author: Simona Bernardi, Raúl Javierre
-Preprocessing of the ISSDA dataset in order to generate a set of files, each one referring to a week of readings
-(ISSDA-CER directories) and /script_results/meterID_energy.csv.
+Preprocessing of the ISSDA dataset in order to generate a set of files (each one referring to a week of readings)
+and /script_results/meterID_<energy/gas>.csv
 
-Take care with the restrictions indicated on "preconditions()" function
+Take care with the restrictions indicated on "preconditions()" function.
+
+└── smartest/
+    ├── Energy/
+    │   ├── data/
+    │   │   ├── data_original (6 ISSDA-CER's txt files)
+    │   │   ├── data_all
+    │   │   └── data_all_filtered
+    │   └── documentation/
+    │       └── customerClassification.csv (*) (from ISSDA-CER: SME and Residential allocations.xlsx)
+    └── Gas/
+        ├── data/
+        │   ├── data_original (78 ISSDA-CER's files)
+        │   ├── data_all
+        │   └── data_all_filtered
+        └── documentation/
+            └── customerClassification.csv (**) (from ISSDA-CER: Residential allocations.xlsx)
+
+(*) -> First and second column:
+            ID;Code
+            1000;...
+            1001;...
+
+(**) -> First and third column:
+            ID;Code
+            1000;...
+            1001;...
 """
 
 import sys
@@ -45,9 +70,9 @@ class dataAnalyzer:
 
     def writeFilteredData(self, files, firstWeek, lastWeek, type):
         if type == "Energy":
-            data_all_filtered = os.path.join(os.path.dirname(__file__)) + "./ISSDA-CER/Energy/data/data_all_filtered/"
+            data_all_filtered = "./ISSDA-CER/Energy/data/data_all_filtered/"
         else:
-            data_all_filtered = os.path.join(os.path.dirname(__file__)) + "./ISSDA-CER/Gas/data/data_all_filtered/"
+            data_all_filtered = "./ISSDA-CER/Gas/data/data_all_filtered/"
 
         # Consider all the weeks between the first and the last one (included)
         ID = self.meterID.index.to_numpy()
@@ -122,15 +147,13 @@ class dataAnalyzer:
                 df = df[df.ID != meter_id]
                 df.to_csv(file, index=False)
 
-        customerClassification = os.path.join(
-            os.path.dirname(__file__)) + "./ISSDA-CER/" + type + "/documentation/customerClassification.csv"
+        customerClassification = "./ISSDA-CER/" + type + "/documentation/customerClassification.csv"
         self.updateMeterID(customerClassification)
 
     def generateSortedFiles(self, files):
         for file in files:
             print("Sorting file:", file)
-            sortedfile = os.path.join(
-                os.path.dirname(__file__)) + "./ISSDA-CER/Energy/data/data_original/sorted" + file[-9:]
+            sortedfile = "./ISSDA-CER/Energy/data/data_original/sorted" + file[-9:]
 
             # Pandas instead of csv library: efficiency
             dset = pd.read_csv(file, sep=' ', names=['ID', 'DT', 'Usage'])
@@ -145,7 +168,7 @@ class dataAnalyzer:
         # Setting the name of the week files
         weekfiles = []
         iweek = []
-        path = os.path.join(os.path.dirname(__file__)) + "./ISSDA-CER/Energy/data/data_all/EnergyDataWeek "
+        path = "./ISSDA-CER/Energy/data/data_all/EnergyDataWeek "
         firstday = int(first / 100)
         lastday = int(last / 100)
         nWeeks = int((lastday - firstday) / 7) + 1  # number of weeks
@@ -213,9 +236,9 @@ class dataAnalyzer:
 
 def energy_preprocessing():
     # data_original -> data_all
-    data_original_dir = os.path.join(os.path.dirname(__file__)) + "./ISSDA-CER/Energy/data/data_original/"
-    data_all = os.path.join(os.path.dirname(__file__)) + "./ISSDA-CER/Energy/data/data_all/"
-    data_all_filtered = os.path.join(os.path.dirname(__file__)) + "./ISSDA-CER/Energy/data/data_all_filtered/"
+    data_original_dir = "./ISSDA-CER/Energy/data/data_original/"
+    data_all = "./ISSDA-CER/Energy/data/data_all/"
+    data_all_filtered = "./ISSDA-CER/Energy/data/data_all_filtered/"
 
     # new dataAnalyzer object
     mg = dataAnalyzer()
@@ -230,22 +253,21 @@ def energy_preprocessing():
 
     # data_all -> data_all_filtered
     files = mg.getDataSetFiles(data_all, "EnergyDataWeek")
-    customerClassification = os.path.join(
-        os.path.dirname(__file__)) + "./ISSDA-CER/Energy/documentation/customerClassification.csv"
+    customerClassification = "./ISSDA-CER/Energy/documentation/customerClassification.csv"
     mg.filterDataSetFirstRound(files, 0, len(files), customerClassification, "Energy")
 
     mg.filterDataSetSecondRound(data_all_filtered, "Energy", 0, 74)
 
-    mg.meterID.to_csv(os.path.join(os.path.dirname(__file__)) + "./script_results/meterID_energy.csv", index=False)
+    mg.meterID.to_csv("./script_results/meterID_energy.csv", index=False)
 
 
 def gas_preprocessing():
     # Gas hasn't got to sort the original data and generate the WeekDataFiles
 
     # data_original -> data_all
-    data_original_dir = os.path.join(os.path.dirname(__file__)) + "./ISSDA-CER/Gas/data/data_original/"
-    data_all = os.path.join(os.path.dirname(__file__)) + "./ISSDA-CER/Gas/data/data_all/"
-    data_all_filtered = os.path.join(os.path.dirname(__file__)) + "./ISSDA-CER/Energy/data/data_all_filtered/"
+    data_original_dir = "./ISSDA-CER/Gas/data/data_original/"
+    data_all = "./ISSDA-CER/Gas/data/data_all/"
+    data_all_filtered = "./ISSDA-CER/Gas/data/data_all_filtered/"
 
     files = os.listdir(data_original_dir)
     for file in files:
@@ -268,14 +290,13 @@ def gas_preprocessing():
 
     # data_all -> data_all_filtered
     files = mg.getDataSetFiles(data_all, "GasDataWeek")
-    customerClassification = os.path.join(
-        os.path.dirname(__file__)) + "./ISSDA-CER/Gas/documentation/customerClassification.csv"
+    customerClassification = "./ISSDA-CER/Gas/documentation/customerClassification.csv"
     mg.filterDataSetFirstRound(files, 0, len(files), customerClassification, "Gas")
 
     # Gas doesn't remove any meterID in this step
     mg.filterDataSetSecondRound(data_all_filtered, "Gas", 0, 73)
 
-    mg.meterID.to_csv(os.path.join(os.path.dirname(__file__)) + "./script_results/meterID_gas.csv", index=False)
+    mg.meterID.to_csv("./script_results/meterID_gas.csv", index=False)
 
 
 def check_preconditions():
@@ -287,31 +308,35 @@ def check_preconditions():
     # Preventing execution error (Energy)
     energy_data_directories_not_exists = not os.path.isdir('./ISSDA-CER/Energy/data/data_original') or \
                                          not os.path.isdir('./ISSDA-CER/Energy/data/data_all') or \
-                                         not os.path.isdir('./ISSDA-CER/Energy/data/data_all_filtered')
+                                         not os.path.isdir('./ISSDA-CER/Energy/data/data_all_filtered') or \
+                                         not os.path.exists('./ISSDA-CER/Energy/documentation/customerClassification.csv')
+
     if energy_data_directories_not_exists:
         print("The following directories are needed:")
-        print("ISSDA-CER/Energy/data/data_original/")
-        print("ISSDA-CER/Energy/data/data_all/")
-        print("ISSDA-CER/Energy/data/data_all_filtered/")
+        print("./ISSDA-CER/Energy/data/data_original/")
+        print("./ISSDA-CER/Energy/data/data_all/")
+        print("./ISSDA-CER/Energy/data/data_all_filtered/")
+        print("./ISSDA-CER/Energy/documentation/customerClassification.csv")
         exit(1)
 
     # Preventing execution error (Gas)
     gas_data_directories_not_exists = not os.path.isdir('./ISSDA-CER/Gas/data/data_original') or \
                                       not os.path.isdir('./ISSDA-CER/Gas/data/data_all') or \
-                                      not os.path.isdir('./ISSDA-CER/Gas/data/data_all_filtered')
+                                      not os.path.isdir('./ISSDA-CER/Gas/data/data_all_filtered') or \
+                                      not os.path.exists('./ISSDA-CER/Gas/documentation/customerClassification.csv')
 
     if gas_data_directories_not_exists:
         print("The following directories are needed:")
-        print("ISSDA-CER/Gas/data/data_original/")
-        print("ISSDA-CER/Gas/data/data_all/")
-        print("ISSDA-CER/Gas/data/data_all_filtered/")
+        print("./ISSDA-CER/Gas/data/data_original/")
+        print("./ISSDA-CER/Gas/data/data_all/")
+        print("./ISSDA-CER/Gas/data/data_all_filtered/")
+        print("./ISSDA-CER/Gas/documentation/customerClassification.csv")
         exit(1)
 
     # Preventing bad behaviour with appending mode
-    energy_data_all_is_not_empty = len(
-        os.listdir(os.path.join(os.path.dirname(__file__)) + "./ISSDA-CER/Energy/data/data_all/")) > 0
+    energy_data_all_is_not_empty = len(os.listdir("./ISSDA-CER/Energy/data/data_all/")) > 0
     if energy_data_all_is_not_empty and sys.argv[1] == "Energy":
-        print("Remove all files of ISSDA-CER/Energy/data/data_all/ before executing this script")
+        print("Remove all files of ./ISSDA-CER/Energy/data/data_all/ before executing this script")
         exit(1)
 
 
@@ -328,6 +353,7 @@ if __name__ == '__main__':
     """
 
     check_preconditions()
+    print("Preconditions OK, starting with the process\n")
 
     if sys.argv[1] == "Energy":
         energy_preprocessing()

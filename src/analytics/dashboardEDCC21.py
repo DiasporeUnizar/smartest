@@ -424,7 +424,8 @@ if __name__ == '__main__':
     print("Total execution time of the experiment (in days): ", t)
 
     # Generate avg bill for the meterID 1014 (energy)
-    meterIDs = [1014]
-    generate_avg_bill_for_each_behaviour_for_60_weeks(behaviours, type_of_dataset, meterIDs)
+    if sys.argv[1] == "energy":
+        meterIDs = [1014]
+        generate_avg_bill_for_each_behaviour_for_60_weeks(behaviours, type_of_dataset, meterIDs)
 
 

@@ -3,8 +3,8 @@
 @Date: updated 18/03/2021
 @Review: Simona Bernardi, 30/03/2021
 
-The main program generates some *basic metrics* to facilitate the comparison of the *detectors* for each *attack*.
-The results with all the metrics are generated in /script_results/dataset_detector_comparer_results.csv
+The main program generates some *basic metrics* to facilitate the comparison of the *detectors* for each *scenario*.
+The results with all the metrics are generated in /script_results/<dataset>_detector_comparer_results.csv
 
 **Metrics:**
 - Execution time of model creation
@@ -20,29 +20,17 @@ The results with all the metrics are generated in /script_results/dataset_detect
 - ARIMAX
 - ARIMA
 - PCA-DBSCAN
-- K-Means
-- MiniBatchK-Means
-- FisherJenks
 - NN
 - KLD
 - JSD
-- IsolationForest
-- TEG_Hamming
-- TEG_Cosine
-- TEG_KLD
 
-**Attacks:**
-- False
-- RSA_0.5_1.5
+**Scenarios:**
+- False : Normal
 - RSA_0.25_1.1
 - RSA_0.5_3
 - Avg
-- Min-Avg
 - Swap
-- FDI0
-- FDI5
 - FDI10
-- FDI20
 - FDI30
 """
 
@@ -54,8 +42,8 @@ from time import time
 # The dataset is set in the first parameter
 # The meterIDs used are specific for each dataset
 # You can customize the attacks and the detectors you want to use here
-tuple_of_attacks = (False, "RSA_0.5_1.5", "RSA_0.25_1.1", "RSA_0.5_3", "Avg", "Min-Avg", "Swap", "FDI0", "FDI5", "FDI10", "FDI20", "FDI30")
-list_of_detectors = ["PCA-DBSCAN"]
+tuple_of_attacks = (False, "RSA_0.25_1.1", "RSA_0.5_3", "Avg", "Swap", "FDI10", "FDI30")
+list_of_detectors = ["ARIMAX", "ARIMA", "Min-Avg", "PCA-DBSCAN", "KLD", "JSD", "NN"]
 
 if __name__ == '__main__':
     """

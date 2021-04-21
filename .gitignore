@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+ISSDA-CER
+script_results/meterID_energy.csv
+script_results/meterID_gas.csv

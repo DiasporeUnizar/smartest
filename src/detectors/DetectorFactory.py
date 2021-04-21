@@ -11,7 +11,7 @@ from .JSD import JSD
 from .KLD import KLD
 from .NN import NN
 from .PCADBSCAN import PCADBSCAN
-
+from .MinAverage import MinAverage
 
 class DetectorFactory:
     """
@@ -32,5 +32,7 @@ class DetectorFactory:
             return PCADBSCAN()
         elif detector == "NN":
             return NN()
+        elif detector == "Min-Avg":
+            return MinAverage()
         else:
             raise KeyError("Detector " + detector + " not found.")

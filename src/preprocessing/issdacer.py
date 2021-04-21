@@ -13,14 +13,14 @@ Take care with the restrictions indicated on "preconditions()" function.
     │   │   ├── data_original (6 ISSDA-CER's txt files)
     │   │   ├── data_all
     │   │   └── data_all_filtered
-    │   └── documentation/
+    │   └── doc/
     │       └── customerClassification.csv (*) (from ISSDA-CER: SME and Residential allocations.xlsx)
     └── Gas/
         ├── data/
         │   ├── data_original (78 ISSDA-CER's files)
         │   ├── data_all
         │   └── data_all_filtered
-        └── documentation/
+        └── doc/
             └── customerClassification.csv (**) (from ISSDA-CER: Residential allocations.xlsx)
 
 (*) -> First and second column:
@@ -147,7 +147,7 @@ class dataAnalyzer:
                 df = df[df.ID != meter_id]
                 df.to_csv(file, index=False)
 
-        customerClassification = "./ISSDA-CER/" + type + "/documentation/customerClassification.csv"
+        customerClassification = "./ISSDA-CER/" + type + "/doc/customerClassification.csv"
         self.updateMeterID(customerClassification)
 
     def generateSortedFiles(self, files):
@@ -253,7 +253,7 @@ def energy_preprocessing():
 
     # data_all -> data_all_filtered
     files = mg.getDataSetFiles(data_all, "EnergyDataWeek")
-    customerClassification = "./ISSDA-CER/Energy/documentation/customerClassification.csv"
+    customerClassification = "./ISSDA-CER/Energy/doc/customerClassification.csv"
     mg.filterDataSetFirstRound(files, 0, len(files), customerClassification, "Energy")
 
     mg.filterDataSetSecondRound(data_all_filtered, "Energy", 0, 74)
@@ -290,7 +290,7 @@ def gas_preprocessing():
 
     # data_all -> data_all_filtered
     files = mg.getDataSetFiles(data_all, "GasDataWeek")
-    customerClassification = "./ISSDA-CER/Gas/documentation/customerClassification.csv"
+    customerClassification = "./ISSDA-CER/Gas/doc/customerClassification.csv"
     mg.filterDataSetFirstRound(files, 0, len(files), customerClassification, "Gas")
 
     # Gas doesn't remove any meterID in this step
@@ -309,28 +309,28 @@ def check_preconditions():
     energy_data_directories_not_exists = not os.path.isdir('./ISSDA-CER/Energy/data/data_original') or \
                                          not os.path.isdir('./ISSDA-CER/Energy/data/data_all') or \
                                          not os.path.isdir('./ISSDA-CER/Energy/data/data_all_filtered') or \
-                                         not os.path.exists('./ISSDA-CER/Energy/documentation/customerClassification.csv')
+                                         not os.path.exists('./ISSDA-CER/Energy/doc/customerClassification.csv')
 
     if energy_data_directories_not_exists:
         print("The following directories are needed:")
         print("./ISSDA-CER/Energy/data/data_original/")
         print("./ISSDA-CER/Energy/data/data_all/")
         print("./ISSDA-CER/Energy/data/data_all_filtered/")
-        print("./ISSDA-CER/Energy/documentation/customerClassification.csv")
+        print("./ISSDA-CER/Energy/doc/customerClassification.csv")
         exit(1)
 
     # Preventing execution error (Gas)
     gas_data_directories_not_exists = not os.path.isdir('./ISSDA-CER/Gas/data/data_original') or \
                                       not os.path.isdir('./ISSDA-CER/Gas/data/data_all') or \
                                       not os.path.isdir('./ISSDA-CER/Gas/data/data_all_filtered') or \
-                                      not os.path.exists('./ISSDA-CER/Gas/documentation/customerClassification.csv')
+                                      not os.path.exists('./ISSDA-CER/Gas/doc/customerClassification.csv')
 
     if gas_data_directories_not_exists:
         print("The following directories are needed:")
         print("./ISSDA-CER/Gas/data/data_original/")
         print("./ISSDA-CER/Gas/data/data_all/")
         print("./ISSDA-CER/Gas/data/data_all_filtered/")
-        print("./ISSDA-CER/Gas/documentation/customerClassification.csv")
+        print("./ISSDA-CER/Gas/doc/customerClassification.csv")
         exit(1)
 
     # Preventing bad behaviour with appending mode

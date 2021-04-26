@@ -41,7 +41,7 @@ class PCADBSCAN(Detector):
         t0 = time()
         mg = dataAnalyzerPCA()
         mg.set_dataframe(training_dataset)
-        mg.updateMeterID("./ISSDA-CER/Energy/documentation/customerClassification.csv")
+        mg.updateMeterID("./ISSDA-CER/Energy/doc/customerClassification.csv")
 
         A = mg.df.pivot(index='DT', columns='ID', values='Usage').to_numpy()
         B = getMatrixB(A)

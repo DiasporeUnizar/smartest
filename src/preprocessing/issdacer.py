@@ -3,12 +3,12 @@ Updated on April 21, 2021
 
 @author: Simona Bernardi, Raúl Javierre
 Preprocessing of the ISSDA dataset in order to generate a set of files (each one referring to a week of readings)
-and /script_results/meterID_<energy/gas>.csv
+and /script_results/meterID_<electricity/gas>.csv
 
 Take care with the restrictions indicated on "preconditions()" function.
 
 └── smartest/
-    ├── Energy/
+    ├── Electricity/
     │   ├── data/
     │   │   ├── data_original (6 ISSDA-CER's txt files)
     │   │   ├── data_all
@@ -69,8 +69,8 @@ class dataAnalyzer:
         return myfiles
 
     def writeFilteredData(self, files, firstWeek, lastWeek, type):
-        if type == "Energy":
-            data_all_filtered = "./ISSDA-CER/Energy/data/data_all_filtered/"
+        if type == "Electricity":
+            data_all_filtered = "./ISSDA-CER/Electricity/data/data_all_filtered/"
         else:
             data_all_filtered = "./ISSDA-CER/Gas/data/data_all_filtered/"
 
@@ -92,7 +92,7 @@ class dataAnalyzer:
     def filterDataSetFirstRound(self, files, firstWeek, lastWeek, clfile, type):
         def getCustomerClassification(file, missingID):
             # Classification according to the file "SME and Residential allocations"
-            # (CER Energy Revised March 2012)
+            # (CER Electricity Revised March 2012)
             d_set = pd.read_csv(file, sep=';', index_col='ID')
             customers = d_set.drop(missingID, axis=0)
 
@@ -129,7 +129,7 @@ class dataAnalyzer:
         files = self.getDataSetFiles(data_all_filtered, type + "DataWeek")
         self.update_df(files, firstWeek, lastWeek)
         uncompleted_meter_ids = self.get_uncompleted_meter_ids(files)
-        # result (for Energy):
+        # result (for Electricity):
         # uncompleted_meter_ids = [5640, 7176, 2573, 1038, 6675, 1048, 1572, 4647, 7223, 5690, 3646, 3651, 5699, 5705, 2122,
         #                           4687, 5202, 1621, 2150, 6248, 3179, 3691, 7275, 6255, 5234, 3190, 4729, 6777, 5759,
         #                           3202, 3719, 5255, 5769, 4238, 4240, 6290, 3735, 6296, 2204, 5792, 7331, 3237, 2726,
@@ -153,7 +153,7 @@ class dataAnalyzer:
     def generateSortedFiles(self, files):
         for file in files:
             print("Sorting file:", file)
-            sortedfile = "./ISSDA-CER/Energy/data/data_original/sorted" + file[-9:]
+            sortedfile = "./ISSDA-CER/Electricity/data/data_original/sorted" + file[-9:]
 
             # Pandas instead of csv library: efficiency
             dset = pd.read_csv(file, sep=' ', names=['ID', 'DT', 'Usage'])
@@ -168,7 +168,7 @@ class dataAnalyzer:
         # Setting the name of the week files
         weekfiles = []
         iweek = []
-        path = "./ISSDA-CER/Energy/data/data_all/EnergyDataWeek "
+        path = "./ISSDA-CER/Electricity/data/data_all/ElectricityDataWeek "
         firstday = int(first / 100)
         lastday = int(last / 100)
         nWeeks = int((lastday - firstday) / 7) + 1  # number of weeks
@@ -234,11 +234,11 @@ class dataAnalyzer:
         self.meterID = pd.merge(ID, clset, on='ID', how='inner')
 
 
-def energy_preprocessing():
+def electricity_preprocessing():
     # data_original -> data_all
-    data_original_dir = "./ISSDA-CER/Energy/data/data_original/"
-    data_all = "./ISSDA-CER/Energy/data/data_all/"
-    data_all_filtered = "./ISSDA-CER/Energy/data/data_all_filtered/"
+    data_original_dir = "./ISSDA-CER/Electricity/data/data_original/"
+    data_all = "./ISSDA-CER/Electricity/data/data_all/"
+    data_all_filtered = "./ISSDA-CER/Electricity/data/data_all_filtered/"
 
     # new dataAnalyzer object
     mg = dataAnalyzer()
@@ -252,13 +252,13 @@ def energy_preprocessing():
     mg.generateWeekDataFiles(files)
 
     # data_all -> data_all_filtered
-    files = mg.getDataSetFiles(data_all, "EnergyDataWeek")
-    customerClassification = "./ISSDA-CER/Energy/doc/customerClassification.csv"
-    mg.filterDataSetFirstRound(files, 0, len(files), customerClassification, "Energy")
+    files = mg.getDataSetFiles(data_all, "ElectricityDataWeek")
+    customerClassification = "./ISSDA-CER/Electricity/doc/customerClassification.csv"
+    mg.filterDataSetFirstRound(files, 0, len(files), customerClassification, "Electricity")
 
-    mg.filterDataSetSecondRound(data_all_filtered, "Energy", 0, 74)
+    mg.filterDataSetSecondRound(data_all_filtered, "Electricity", 0, 74)
 
-    mg.meterID.to_csv("./script_results/meterID_energy.csv", index=False)
+    mg.meterID.to_csv("./script_results/meterID_electricity.csv", index=False)
 
 
 def gas_preprocessing():
@@ -301,22 +301,22 @@ def gas_preprocessing():
 
 def check_preconditions():
     # Checking invocation parameters
-    if len(sys.argv) != 2 or (sys.argv[1] != "Energy" and sys.argv[1] != "Gas"):
-        print("Usage: python3 issdacer.py <Energy/Gas>")
+    if len(sys.argv) != 2 or (sys.argv[1] != "Electricity" and sys.argv[1] != "Gas"):
+        print("Usage: python3 issdacer.py <Electricity/Gas>")
         exit(85)
 
-    # Preventing execution error (Energy)
-    energy_data_directories_not_exists = not os.path.isdir('./ISSDA-CER/Energy/data/data_original') or \
-                                         not os.path.isdir('./ISSDA-CER/Energy/data/data_all') or \
-                                         not os.path.isdir('./ISSDA-CER/Energy/data/data_all_filtered') or \
-                                         not os.path.exists('./ISSDA-CER/Energy/doc/customerClassification.csv')
+    # Preventing execution error (Electricity)
+    electricity_data_directories_not_exists = not os.path.isdir('./ISSDA-CER/Electricity/data/data_original') or \
+                                         not os.path.isdir('./ISSDA-CER/Electricity/data/data_all') or \
+                                         not os.path.isdir('./ISSDA-CER/Electricity/data/data_all_filtered') or \
+                                         not os.path.exists('./ISSDA-CER/Electricity/doc/customerClassification.csv')
 
-    if energy_data_directories_not_exists:
+    if electricity_data_directories_not_exists:
         print("The following directories are needed:")
-        print("./ISSDA-CER/Energy/data/data_original/")
-        print("./ISSDA-CER/Energy/data/data_all/")
-        print("./ISSDA-CER/Energy/data/data_all_filtered/")
-        print("./ISSDA-CER/Energy/doc/customerClassification.csv")
+        print("./ISSDA-CER/Electricity/data/data_original/")
+        print("./ISSDA-CER/Electricity/data/data_all/")
+        print("./ISSDA-CER/Electricity/data/data_all_filtered/")
+        print("./ISSDA-CER/Electricity/doc/customerClassification.csv")
         exit(1)
 
     # Preventing execution error (Gas)
@@ -334,28 +334,28 @@ def check_preconditions():
         exit(1)
 
     # Preventing bad behaviour with appending mode
-    energy_data_all_is_not_empty = len(os.listdir("./ISSDA-CER/Energy/data/data_all/")) > 0
-    if energy_data_all_is_not_empty and sys.argv[1] == "Energy":
-        print("Remove all files of ./ISSDA-CER/Energy/data/data_all/ before executing this script")
+    electricity_data_all_is_not_empty = len(os.listdir("./ISSDA-CER/Electricity/data/data_all/")) > 0
+    if electricity_data_all_is_not_empty and sys.argv[1] == "Electricity":
+        print("Remove all files of ./ISSDA-CER/Electricity/data/data_all/ before executing this script")
         exit(1)
 
 
 # data_original -> data_all_filtered
 
-# ENERGY: data_original (from 6 to one per week) -> data_all (remove meterIDs without enough nObs)
+# ELECTRICITY: data_original (from 6 to one per week) -> data_all (remove meterIDs without enough nObs)
 #               -> data_all_filtered (remove some meterIDs that are not complete for ALL weeks) -> data_all_filtered
 
 # GAS: data_original (remove files with less than 501649 obs) -> data_all (remove some meterIDs) -> data_all_filtered
 if __name__ == '__main__':
     """
     args: 
-    sys.argv[1]:type (Energy, Gas)
+    sys.argv[1]:type (Electricity, Gas)
     """
 
     check_preconditions()
     print("Preconditions OK, starting with the process\n")
 
-    if sys.argv[1] == "Energy":
-        energy_preprocessing()
+    if sys.argv[1] == "Electricity":
+        electricity_preprocessing()
     else:
         gas_preprocessing()

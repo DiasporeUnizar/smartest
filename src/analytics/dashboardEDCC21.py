@@ -22,7 +22,7 @@ import pandas as pd
 import numpy as np
 from math import sqrt
 from statsmodels.stats.weightstats import zconfint
-from src import meterIDsEnergy, meterIDsGas
+from src import meterIDsElectricity, meterIDsGas
 
 
 def add_recall_precision_and_fmeasure_to_dataframe(df):
@@ -54,9 +54,9 @@ def generate_metric_plot_for_each_detector(behaviour, detectors, metric, classif
 
 
 def set_and_get_variables(type_of_dataset):
-    if type_of_dataset == "energy":
+    if type_of_dataset == "electricity":
         classifications = ['1'] #, '2', '3']
-        meterIDs = meterIDsEnergy
+        meterIDs = meterIDsElectricity
     else:                   #gas
         classifications = ['1'] #, '2', '3', '4', '5']
         meterIDs = meterIDsGas
@@ -146,12 +146,12 @@ def compare_normal_with_attack_classes(label_behaviour1, label_behaviour2, file_
 
 def compare_normal_behaviour_with(another_behaviour, dataset):
     try:
-        if dataset == 'energy':
-            """It uses the meterID 1014 and the Energy ISSDA CER dataset"""
+        if dataset == 'electricity':
+            """It uses the meterID 1014 and the Electricity ISSDA CER dataset"""
             compare_behaviours(label_behaviour1="Normal", label_behaviour2=another_behaviour,
-                               file_behaviour1="./script_results/energy_training_data/1014_0_60.csv",
-                               file_behaviour2="./script_results/energy_training_data/1014_" + another_behaviour + "_0_60.csv",
-                               title="Normal behaviour VS " + another_behaviour + " behaviour (Energy ISSDA CER | ID=1014)")
+                               file_behaviour1="./script_results/electricity_training_data/1014_0_60.csv",
+                               file_behaviour2="./script_results/electricity_training_data/1014_" + another_behaviour + "_0_60.csv",
+                               title="Normal behaviour VS " + another_behaviour + " behaviour (Electricity ISSDA CER | ID=1014)")
 
         elif dataset == 'gas':
             """It uses the meterID 2513 and the Gas ISSDA CER dataset"""
@@ -355,7 +355,7 @@ def generate_global_metrics_for_each_detector(df, detectors):
 if __name__ == '__main__':
     """
     args: 
-    sys.argv[1]:type (energy, gas)
+    sys.argv[1]:type (electricity, gas)
     """
     type_of_dataset = sys.argv[1]
 
@@ -387,44 +387,44 @@ if __name__ == '__main__':
 
 
     # Compare normal behaviours and the attack classes, meterID 1014
-    file_RSAbehaviours = ["./script_results/energy_training_data/1014_RSA_0.5_3_0_60.csv",
-    					  "./script_results/energy_training_data/1014_RSA_0.25_1.1_0_60.csv"]
+    file_RSAbehaviours = ["./script_results/electricity_training_data/1014_RSA_0.5_3_0_60.csv",
+    					  "./script_results/electricity_training_data/1014_RSA_0.25_1.1_0_60.csv"]
     RSA_behaviours = [ "RSA[0.5,3]", "RSA[0.25,1.1]"]
 
     compare_normal_with_attack_classes(label_behaviour1="Normal", label_behaviour2=RSA_behaviours,
-                               file_behaviour1="./script_results/energy_training_data/1014_0_60.csv",
+                               file_behaviour1="./script_results/electricity_training_data/1014_0_60.csv",
                                file_behaviour2=file_RSAbehaviours)
 
-    file_Avgbehaviours = ["./script_results/energy_training_data/1014_Avg_0_60.csv" ] 
+    file_Avgbehaviours = ["./script_results/electricity_training_data/1014_Avg_0_60.csv" ] 
                           
     Avg_behaviours = ["Avg[0.5,1.5]" ] 
                      
 
     compare_normal_with_attack_classes(label_behaviour1="Normal", label_behaviour2=Avg_behaviours,
-                               file_behaviour1="./script_results/energy_training_data/1014_0_60.csv",
+                               file_behaviour1="./script_results/electricity_training_data/1014_0_60.csv",
                                file_behaviour2=file_Avgbehaviours)
 
-    file_Swapbehaviours = ["./script_results/energy_training_data/1014_Swap_0_60.csv"]
+    file_Swapbehaviours = ["./script_results/electricity_training_data/1014_Swap_0_60.csv"]
     Swap_behaviours = ["Swap"]
 
     compare_normal_with_attack_classes(label_behaviour1="Normal", label_behaviour2=Swap_behaviours,
-                               file_behaviour1="./script_results/energy_training_data/1014_0_60.csv",
+                               file_behaviour1="./script_results/electricity_training_data/1014_0_60.csv",
                                file_behaviour2=file_Swapbehaviours)
 
-    file_FDIbehaviours = [ "./script_results/energy_training_data/1014_FDI10_0_60.csv",
-    						"./script_results/energy_training_data/1014_FDI30_0_60.csv"]
+    file_FDIbehaviours = [ "./script_results/electricity_training_data/1014_FDI10_0_60.csv",
+    						"./script_results/electricity_training_data/1014_FDI30_0_60.csv"]
     FDI_behaviours = [ "FDI_10", "FDI_30"]
 
     compare_normal_with_attack_classes(label_behaviour1="Normal", label_behaviour2=FDI_behaviours,
-                               file_behaviour1="./script_results/energy_training_data/1014_0_60.csv",
+                               file_behaviour1="./script_results/electricity_training_data/1014_0_60.csv",
                                file_behaviour2=file_FDIbehaviours)
 
     #Execution time of the experiment
     t = compute_experiment_exec_time_in_days(detector_results,behaviours)
     print("Total execution time of the experiment (in days): ", t)
 
-    # Generate avg bill for the meterID 1014 (energy)
-    if sys.argv[1] == "energy":
+    # Generate avg bill for the meterID 1014 (electricity)
+    if sys.argv[1] == "electricity":
         meterIDs = [1014]
         generate_avg_bill_for_each_behaviour_for_60_weeks(behaviours, type_of_dataset, meterIDs)
 

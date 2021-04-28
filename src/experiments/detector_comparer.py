@@ -36,7 +36,7 @@ The results with all the metrics are generated in /script_results/<dataset>_dete
 
 import sys
 from src.detectors.DetectorFactory import DetectorFactory
-from src import meterIDsGas, meterIDsEnergy
+from src import meterIDsGas, meterIDsElectricity
 from time import time
 
 # The dataset is set in the first parameter
@@ -48,14 +48,14 @@ list_of_detectors = ["ARIMAX", "ARIMA", "Min-Avg", "PCA-DBSCAN", "KLD", "JSD", "
 if __name__ == '__main__':
     """
     args:
-    sys.argv[1]:dataset ("energy" or "gas")
+    sys.argv[1]:dataset ("electricity" or "gas")
     """
-    if sys.argv[1] != "energy" and sys.argv[1] != "gas":
-        print("Usage: python3 training_and_testing_generator.py <energy/gas> <test>")
+    if sys.argv[1] != "electricity" and sys.argv[1] != "gas":
+        print("Usage: python3 detector_comparer.py <electricity/gas> <test>")
         exit(85)
 
-    if sys.argv[1] == "energy":
-        list_of_meterIDs = meterIDsEnergy
+    if sys.argv[1] == "electricity":
+        list_of_meterIDs = meterIDsElectricity
     else:
         list_of_meterIDs = meterIDsGas
 

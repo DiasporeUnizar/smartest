@@ -4,7 +4,7 @@
 
 @Review: Simona Bernardi - 06/04/2021
 
-¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡This detector is designed ONLY for Energy dataset (ISSDA-CER)!!!!!!!!!!!!!!!!!!!!!!!
+¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡This detector is designed ONLY for Electricity dataset (ISSDA-CER)!!!!!!!!!!!!!!!!!!!!!!!
 
 This module encapsulates:
 - PCA functionality for a given dataset
@@ -14,7 +14,7 @@ This module encapsulates:
 import os
 import pandas as pd
 import numpy as np
-from src import meterIDsEnergy
+from src import meterIDsElectricity
 from robustbase import Sn
 from sklearn.cluster import DBSCAN
 from sklearn.metrics import euclidean_distances, pairwise_distances
@@ -24,10 +24,10 @@ from time import time
 
 nObs = 336  # number of readings
 
-FIRST_WEEK_TRAINING_ENERGY = 0
-LAST_WEEK_TRAINING_ENERGY = 60
-FIRST_WEEK_TESTING_ENERGY = 61
-LAST_WEEK_TESTING_ENERGY = 75
+FIRST_WEEK_TRAINING_ELECTRICITY = 0
+LAST_WEEK_TRAINING_ELECTRICITY = 60
+FIRST_WEEK_TESTING_ELECTRICITY = 61
+LAST_WEEK_TESTING_ELECTRICITY = 75
 
 FIRST_WEEK_TRAINING_GAS = 0
 LAST_WEEK_TRAINING_GAS = 60
@@ -41,7 +41,7 @@ class PCADBSCAN(Detector):
         t0 = time()
         mg = dataAnalyzerPCA()
         mg.set_dataframe(training_dataset)
-        mg.updateMeterID("./ISSDA-CER/Energy/doc/customerClassification.csv")
+        mg.updateMeterID("./ISSDA-CER/Electricity/doc/customerClassification.csv")
 
         A = mg.df.pivot(index='DT', columns='ID', values='Usage').to_numpy()
         B = getMatrixB(A)
@@ -104,9 +104,9 @@ class PCADBSCAN(Detector):
         return n_tp, n_tn, n_fp, n_fn
 
     def get_training_dataset(self, meterID, type_of_dataset):
-        if type_of_dataset == "energy":
-            FIRST_WEEK_TRAINING = FIRST_WEEK_TRAINING_ENERGY
-            LAST_WEEK_TRAINING = LAST_WEEK_TRAINING_ENERGY
+        if type_of_dataset == "electricity":
+            FIRST_WEEK_TRAINING = FIRST_WEEK_TRAINING_ELECTRICITY
+            LAST_WEEK_TRAINING = LAST_WEEK_TRAINING_ELECTRICITY
         else:   # gas -> MIGRATED BUT NOT APPLICABLE
             FIRST_WEEK_TRAINING = FIRST_WEEK_TESTING_GAS
             LAST_WEEK_TRAINING = LAST_WEEK_TRAINING_GAS
@@ -115,7 +115,7 @@ class PCADBSCAN(Detector):
             training_dataset = pd.read_csv("./script_results/pca_dbscan_training.csv")
         else:  # Heavy! Generating file once and next invocations going to "if branch"
             mg = dataAnalyzerPCA()
-            files = mg.getDataSetFiles("./ISSDA-CER/Energy/data/data_all_filtered")
+            files = mg.getDataSetFiles("./ISSDA-CER/Electricity/data/data_all_filtered")
             training_dataset = mg.loadFilteredData(files, FIRST_WEEK_TRAINING, LAST_WEEK_TRAINING)
             training_dataset.to_csv("./script_results/pca_dbscan_training.csv", index=False)
 
@@ -156,8 +156,8 @@ class dataAnalyzerPCA:
             # insert a new column for weeks i-1
             dset.insert(1, "Week", (i - 1) * np.ones(dset.shape[0], dtype='int'), True)
             df = pd.concat([df, dset])
-            # Get only selected meterIDs (500 from energy_customer_analysis.py)
-            df = df[df['ID'].isin(meterIDsEnergy)]
+            # Get only selected meterIDs (500 from electricity_customer_analysis.py)
+            df = df[df['ID'].isin(meterIDsElectricity)]
             i += 1
 
         return df

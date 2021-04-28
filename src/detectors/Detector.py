@@ -9,10 +9,10 @@ from abc import ABC, abstractmethod
 import pandas as pd
 import os
 
-FIRST_WEEK_TRAINING_ENERGY = 0
-LAST_WEEK_TRAINING_ENERGY = 60
-FIRST_WEEK_TESTING_ENERGY = 61
-LAST_WEEK_TESTING_ENERGY = 75
+FIRST_WEEK_TRAINING_ELECTRICITY = 0
+LAST_WEEK_TRAINING_ELECTRICITY = 60
+FIRST_WEEK_TESTING_ELECTRICITY = 61
+LAST_WEEK_TESTING_ELECTRICITY = 75
 
 FIRST_WEEK_TRAINING_GAS = 0
 LAST_WEEK_TRAINING_GAS = 60
@@ -76,9 +76,9 @@ class Detector(ABC):
         """
         Returns the training dataset for the meterID passed
         """
-        if type_of_dataset == "energy":
-            FIRST_WEEK_TRAINING = FIRST_WEEK_TRAINING_ENERGY
-            LAST_WEEK_TRAINING = LAST_WEEK_TRAINING_ENERGY
+        if type_of_dataset == "electricity":
+            FIRST_WEEK_TRAINING = FIRST_WEEK_TRAINING_ELECTRICITY
+            LAST_WEEK_TRAINING = LAST_WEEK_TRAINING_ELECTRICITY
         else:
             FIRST_WEEK_TRAINING = FIRST_WEEK_TRAINING_GAS
             LAST_WEEK_TRAINING = LAST_WEEK_TRAINING_GAS
@@ -89,9 +89,9 @@ class Detector(ABC):
         """
         Returns the testing dataset for the meterID passed
         """
-        if type_of_dataset == "energy":
-            FIRST_WEEK_TESTING = FIRST_WEEK_TESTING_ENERGY
-            LAST_WEEK_TESTING = LAST_WEEK_TESTING_ENERGY
+        if type_of_dataset == "electricity":
+            FIRST_WEEK_TESTING = FIRST_WEEK_TESTING_ELECTRICITY
+            LAST_WEEK_TESTING = LAST_WEEK_TESTING_ELECTRICITY
         else:
             FIRST_WEEK_TESTING = FIRST_WEEK_TESTING_GAS
             LAST_WEEK_TESTING = LAST_WEEK_TESTING_GAS

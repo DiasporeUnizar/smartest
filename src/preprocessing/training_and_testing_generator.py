@@ -3,10 +3,10 @@
 @Date: updated 18/03/2021
 
 The main program generates:
-    1. Training csv files on /script_results/energy_training_data (GDrive)
+    1. Training csv files on /script_results/electricity_training_data (GDrive)
         with syntax: meterID_0_60.csv | example: 2458_0_60.csv  (no attack)
         or syntax: meterID_kind_0_60.csv | example: 2458_Avg_0_60.csv   (attack = kind)
-    2. Testing csv files on /script_results/energy_testing_data (GDrive)
+    2. Testing csv files on /script_results/electricity_testing_data (GDrive)
         with syntax: meterID_kind_x_y.csv | example: 2458_Avg_x_y.csv   (attack = kind)
         or syntax: meterID_x_y.csv | example: 2458_x_y.csv  (no attack)
 
@@ -17,16 +17,15 @@ for a list of 500 meterIDs previously selected (see <dataset>_customer_analysis.
 
 import pandas as pd
 import numpy as np
-import random
 import sys
-from src import meterIDsGas, meterIDsEnergy
+from src import meterIDsGas, meterIDsElectricity
 
 NINE_AM = 19
 
 FIRST_WEEK_TRAINING = 0
 LAST_WEEK_TRAINING = 60
 FIRST_WEEK_TESTING = LAST_WEEK_TRAINING + 1
-LAST_WEEK_TESTING_ENERGY = 75
+LAST_WEEK_TESTING_ELECTRICITY = 75
 LAST_WEEK_TESTING_GAS = 77
 
 SEVEN_DAYS_PER_WEEK = 7
@@ -37,7 +36,6 @@ TWENTY_PER_CENT = 0.2
 TEN_PER_CENT = 0.1
 FIVE_PER_CENT = 0.05
 
-MAX_MIN_AVG = 9999999
 SEED = 19990722
 dataset = None
 
@@ -69,24 +67,6 @@ def swap_usages(df):
         list_df[i] = list_df[i].sort_values(by=['DT'])
 
     return pd.concat(list_df)['Usage'].to_list()
-
-
-def get_min_avg_of_training_weeks(caseID):   # Heavy!!! and a little bit legacy...
-    min_avg = MAX_MIN_AVG
-
-    for i in range(0, LAST_WEEK_TRAINING + 1):  # training weeks [week0, week60]
-        filename = "./ISSDA-CER/" + dataset.lower() + "/data/data_all_filtered/" + dataset + "DataWeek " + str(i)
-        try:
-            dset = pd.read_csv(filename)
-        except FileNotFoundError:  # Range is not complete or is out of range
-            continue
-        dset = dset[dset.ID == int(caseID)]
-        avg = dset['Usage'].mean()
-
-        if avg < min_avg:
-            min_avg = avg
-
-    return min_avg
 
 
 def load_week_files(firstWeek, lastWeek, caseID=None):
@@ -135,25 +115,11 @@ class AttackInjector:
                 mean_data_week.fill(data_week['Usage'].mean())
                 mean_Kw.append(mean_data_week)
             consumed_faked = self.inject_attack(np.array(mean_Kw).flatten(), a, b)
-        elif kind == 'Min-Avg':
-            min_avg = get_min_avg_of_training_weeks(self.caseID)
-            consumed_faked = []
-            random.seed(SEED)
-            for i in range(0, len(data)):
-                consumed_faked.append(random.uniform(min_avg, min_avg + 1))
         elif kind == 'Swap':
             consumed_faked = swap_usages(data)
-        elif kind == 'FDI0':
-            consumed_faked = np.zeros(len(data))
-        elif kind == 'FDI5':
-            data['5%'] = data['Usage'] * FIVE_PER_CENT
-            consumed_faked = data['5%'].tolist()
         elif kind == 'FDI10':
             data['10%'] = data['Usage'] * TEN_PER_CENT
             consumed_faked = data['10%'].tolist()
-        elif kind == 'FDI20':
-            data['20%'] = data['Usage'] * TWENTY_PER_CENT
-            consumed_faked = data['20%'].tolist()
         elif kind == 'FDI30':
             data['30%'] = data['Usage'] * THIRTY_PER_CENT
             consumed_faked = data['30%'].tolist()
@@ -173,22 +139,22 @@ def generate_attacked_file(attack_injector, meterID, testing_set, d_type, first_
 if __name__ == '__main__':
     '''
     args: 
-    sys.argv[1]:dataset ("Energy" or "Gas")
+    sys.argv[1]:dataset ("Electricity" or "Gas")
     '''
 
-    if len(sys.argv) != 2 or sys.argv[1] != "Energy" and sys.argv[1] != "Gas":
-        print("Usage: python3 training_and_testing_generator.py <Energy/Gas>")
+    if len(sys.argv) != 2 or sys.argv[1] != "Electricity" and sys.argv[1] != "Gas":
+        print("Usage: python3 training_and_testing_generator.py <Electricity/Gas>")
         exit(85)
 
     # Global variable
     dataset = sys.argv[1]
 
-    if dataset == "Energy":
+    if dataset == "Electricity":
         first_week_train = FIRST_WEEK_TRAINING
         last_week_train = LAST_WEEK_TRAINING
         first_week_test = FIRST_WEEK_TESTING
-        last_week_test = LAST_WEEK_TESTING_ENERGY
-        meterIDs = meterIDsEnergy
+        last_week_test = LAST_WEEK_TESTING_ELECTRICITY
+        meterIDs = meterIDsElectricity
         dataset_training_all_meter_ids = load_week_files(firstWeek=first_week_train, lastWeek=last_week_train)
         dataset_testing_all_meter_ids = load_week_files(firstWeek=first_week_test, lastWeek=last_week_test)
     elif dataset == "Gas":
@@ -200,7 +166,7 @@ if __name__ == '__main__':
         dataset_training_all_meter_ids = load_week_files(firstWeek=first_week_train, lastWeek=last_week_train)
         dataset_testing_all_meter_ids = load_week_files(firstWeek=first_week_test, lastWeek=last_week_test)
     else:
-        print("Usage: python3 training_and_testing_generator.py <Energy/Gas>")
+        print("Usage: python3 training_and_testing_generator.py <Electricity/Gas>")
         exit(85)
 
     for meterID in meterIDs:
@@ -211,13 +177,8 @@ if __name__ == '__main__':
         print("\nGenerating file:", "./script_results/" + dataset.lower() + "_training_data/" + str(meterID) + "_" + str(first_week_train) + "_" + str(last_week_train) + ".csv")
         training_set.to_csv("./script_results/" + dataset.lower() + "_training_data/" + str(meterID) + "_" + str(first_week_train) + "_" + str(last_week_train) + ".csv", index=False)   # GDrive
         generate_attacked_file(attack_injector, meterID, training_set, dataset, first_week_train, last_week_train, "training_data", "Swap")
-        generate_attacked_file(attack_injector, meterID, training_set, dataset, first_week_train, last_week_train, "training_data", "RSA_0.5_1.5", 0.5, 1.5)
         generate_attacked_file(attack_injector, meterID, training_set, dataset, first_week_train, last_week_train, "training_data", "Avg", 0.5, 1.5)
-        generate_attacked_file(attack_injector, meterID, training_set, dataset, first_week_train, last_week_train, "training_data", "Min-Avg")
-        generate_attacked_file(attack_injector, meterID, training_set, dataset, first_week_train, last_week_train, "training_data", "FDI0")
-        generate_attacked_file(attack_injector, meterID, training_set, dataset, first_week_train, last_week_train, "training_data", "FDI5")
         generate_attacked_file(attack_injector, meterID, training_set, dataset, first_week_train, last_week_train, "training_data", "FDI10")
-        generate_attacked_file(attack_injector, meterID, training_set, dataset, first_week_train, last_week_train, "training_data", "FDI20")
         generate_attacked_file(attack_injector, meterID, training_set, dataset, first_week_train, last_week_train, "training_data", "FDI30")
         generate_attacked_file(attack_injector, meterID, training_set, dataset, first_week_train, last_week_train, "training_data", "RSA_0.25_1.1", 0.25, 1.1)
         generate_attacked_file(attack_injector, meterID, training_set, dataset, first_week_train, last_week_train, "training_data", "RSA_0.5_3", 0.5, 3)
@@ -227,13 +188,8 @@ if __name__ == '__main__':
         print("Generating file:", "./script_results/" + dataset.lower() + "_testing_data/" + str(meterID) + "_" + str(first_week_test) + "_" + str(last_week_test) + ".csv")
         testing_set.to_csv("./script_results/" + dataset.lower() + "_testing_data/" + str(meterID) + "_" + str(first_week_test) + "_" + str(last_week_test) + ".csv", index=False)   # GDrive
         generate_attacked_file(attack_injector, meterID, testing_set, dataset, first_week_test, last_week_test, "testing_data", "Swap")
-        generate_attacked_file(attack_injector, meterID, training_set, dataset, first_week_train, last_week_train,"testing_data", "RSA_0.5_1.5", 0.5, 1.5)
         generate_attacked_file(attack_injector, meterID, testing_set, dataset, first_week_test, last_week_test, "testing_data", "Avg", 0.5, 1.5)
-        generate_attacked_file(attack_injector, meterID, testing_set, dataset, first_week_test, last_week_test, "testing_data", "Min-Avg")
-        generate_attacked_file(attack_injector, meterID, testing_set, dataset, first_week_test, last_week_test, "testing_data", "FDI0")
-        generate_attacked_file(attack_injector, meterID, testing_set, dataset, first_week_test, last_week_test, "testing_data", "FDI5")
         generate_attacked_file(attack_injector, meterID, testing_set, dataset, first_week_test, last_week_test, "testing_data", "FDI10")
-        generate_attacked_file(attack_injector, meterID, testing_set, dataset, first_week_test, last_week_test, "testing_data", "FDI20")
         generate_attacked_file(attack_injector, meterID, testing_set, dataset, first_week_test, last_week_test, "testing_data", "FDI30")
         generate_attacked_file(attack_injector, meterID, testing_set, dataset, first_week_test, last_week_test, "testing_data", "RSA_0.25_1.1", 0.25, 1.1)
         generate_attacked_file(attack_injector, meterID, testing_set, dataset, first_week_test, last_week_test, "testing_data", "RSA_0.5_3", 0.5, 3)

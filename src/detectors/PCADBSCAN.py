@@ -80,14 +80,18 @@ class PCADBSCAN(Detector):
         # Build DBSCAN model
         # ===========================================================
         db = DBSCAN(eps=radiusSn, min_samples=minPts).fit(model.Y_BmeterID)
+        t_dbscan = time() - t0
+        t0 = time()
 
         # Compute outliers using the tests dataset
         try:
             n_false, nObservations = model.computeOutliers(db, radiusSn)
         except ValueError:  # Error: 60 noisy points fitting -> 0 clusters
-            return -1, -1, -1,
+            return -1, -1, [-1, -1]
 
-        return n_false, nObservations, time() - t0
+        t_predict = time() - t0
+
+        return n_false, nObservations, [t_dbscan, t_predict]
 
     def compute_outliers(self, testing_len, predictions, is_attack_behavior):
         if predictions == -1:
@@ -125,6 +129,39 @@ class PCADBSCAN(Detector):
         testing_dataset = super(PCADBSCAN, self).get_testing_dataset(attack, meterID, type_of_dataset)
         return insertWeekColumnToTestingDataframe(testing_dataset)
 
+    def print_metrics(self, meterID, detector, attack, time_model_creation, time_model_prediction, n_tp, n_tn, n_fp, n_fn):
+        print("\n\nMeterID:\t\t\t", meterID)
+        print("Detector:\t\t\t", detector)
+        print("Attack:\t\t\t\t", attack)
+        # time_model_creation also contains time of creating DBSCAN model, that is time_model_prediction[0]
+        print("Exec. time of model creation:\t", time_model_creation + time_model_prediction[0], "seconds")
+        # time_model_prediction is just the part that verifies if the test points are outside the cluster or not, that is time_model_prediction[1]
+        print("Exec. time of model prediction:\t", time_model_prediction[1], "seconds")
+        print("Accuracy:\t\t\t", (n_tp + n_tn) / (n_tp + n_tn + n_fp + n_fn))
+        print("Number of true positives:\t", n_tp)
+        print("Number of false negatives:\t", n_fn)
+        print("Number of true negatives:\t", n_tn)
+        print("Number of false positives:\t", n_fp)
+        print("[", n_tp, n_fp, "]")
+        print("[", n_fn, n_tn, "]\n\n")
+
+    def metrics_to_csv(self, meterID, detector, attack, time_model_creation, time_model_prediction, n_tp, n_tn, n_fp, n_fn, type_of_dataset):
+        resulting_csv_path = "./script_results/" + type_of_dataset + "_detector_comparer_results.csv"
+
+        df = pd.DataFrame({'meterID': meterID,
+                           'detector': detector,
+                           'attack': attack,
+                           'time_model_creation': time_model_creation + time_model_prediction[0],
+                           'time_model_prediction': time_model_prediction[1],
+                           'n_tp': n_tp,
+                           'n_tn': n_tn,
+                           'n_fp': n_fp,
+                           'n_fn': n_fn,
+                           'accuracy': (n_tp + n_tn) / (n_tp + n_tn + n_fp + n_fn)},
+                          index=[0])
+
+        df.to_csv(resulting_csv_path, mode='a', header=not os.path.exists(resulting_csv_path), index=False)
+
 
 class dataAnalyzerPCA:
 
@@ -156,7 +193,7 @@ class dataAnalyzerPCA:
             # insert a new column for weeks i-1
             dset.insert(1, "Week", (i - 1) * np.ones(dset.shape[0], dtype='int'), True)
             df = pd.concat([df, dset])
-            # Get only selected meterIDs (500 from electricity_customer_analysis.py)
+            # Get only selected meterIDs (1000 from electricity_customer_analysis.py)
             df = df[df['ID'].isin(meterIDsElectricity)]
             i += 1
 

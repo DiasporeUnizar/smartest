@@ -197,6 +197,9 @@ def treat_PCA_DBSCAN_anomalies(detector_results):
     uncompleted_pca_dbscan_experiments = pca_dbscan_experiments[pca_dbscan_experiments.n_tp == -1]
 
     n_pca_dbscan_experiments = len(pca_dbscan_experiments.index)
+    if n_pca_dbscan_experiments == 0:
+        return detector_results
+
     n_uncompleted_pca_dbscan_experiments = len(uncompleted_pca_dbscan_experiments.index)
     print("PCA-DBSCAN experiments:\t\t\t\t" + str(n_pca_dbscan_experiments))
     print("PCA-DBSCAN uncompleted experiments:\t" + str(n_uncompleted_pca_dbscan_experiments))

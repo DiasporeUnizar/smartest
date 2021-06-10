@@ -31,4 +31,9 @@ You must run all the ```python3``` commands from the root directory.
 The original input datasets are the electricity and gas dataset from the Irish Social Science Data Archive - Commision for Energy Regulation (ISSDA-CER).
 Both are available, for research purposes, upon request, and the information provided is anonymous.
 
-External link: https://www.ucd.ie/issda/data/commissionforenergyregulationcer/
+- External link: https://www.ucd.ie/issda/data/commissionforenergyregulationcer/
+
+The experimental framework and experiments results are detailed in:
+
+- S. Bernardi, R. Javierre, J. Merseguer, J. Requeno, *Detectors of Smart Grid Integrity Attacks: An Experimental Assessment*, 17th European Dependable Computing Conference, 13-16 September 2021, Munich, Germany.
+

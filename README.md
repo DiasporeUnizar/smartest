@@ -35,5 +35,5 @@ Both are available, for research purposes, upon request, and the information pro
 
 The experimental framework and experiments results are detailed in:
 
-- S. Bernardi, R. Javierre, J. Merseguer, J. Requeno, *Detectors of Smart Grid Integrity Attacks: An Experimental Assessment*, 17th European Dependable Computing Conference, 13-16 September 2021, Munich, Germany.
+- S. Bernardi, R. Javierre, J. Merseguer, J. Requeno, *Detectors of Smart Grid Integrity Attacks: An Experimental Assessment*, 17th European Dependable Computing Conference, 13-16 September 2021, Munich, Germany. [See preprint](https://github.com/DiasporeUnizar/smartest/blob/main/biblio/BJMR21preprint.pdf).
 

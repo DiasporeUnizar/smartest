@@ -1,5 +1,4 @@
-# smartest
-aSsessMent frAmework foR deTEctors of integrity attacks to Smart meTers
+# smartest: aSsessMent frAmework foR deTEctors of integrity attacks to Smart meTers
 
 This repository includes an experimental framework for assessing the quality and performance
 of detectors of integrity attacks to smart-meters.
